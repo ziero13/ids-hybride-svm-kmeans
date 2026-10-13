@@ -103,7 +103,8 @@ with c1:
                                  index=["tcp", "udp", "icmp"].index(
                                      str(dflt.get("protocol_type", "tcp"))))
     service = st.text_input("service", value=str(dflt.get("service", "http")))
-    flag = st.selectbox("flag", ["SF", "S0", "REJ", "RSTR", "SH", "OTH"], index=0)
+    flag = st.selectbox("flag", ["SF", "S0", "REJ", "RSTR", "RSTO", "RSTOS0",
+                                 "S1", "S2", "S3", "SH", "OTH"], index=0)
 with c2:
     logged_in = st.selectbox("logged_in", [0, 1], index=int(dflt.get("logged_in", 0)))
     count = st.number_input("count", min_value=0.0, value=float(dflt.get("count", 0)))

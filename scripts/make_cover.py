@@ -64,7 +64,7 @@ ax.text(50, 44.5, "pour la détection d'intrusion", ha="center", va="center",
 ax.plot([30, 70], [39.5, 39.5], color=BLEU, lw=1.5)
 ax.text(50, 35.5, "SVM + K-Means  ·  NSL-KDD", ha="center", va="center",
         fontsize=14, color=GRIS)
-ax.text(50, 31.5, "TP — Cybersécurité & Machine Learning", ha="center",
+ax.text(50, 31.5, "TP Intelligence Artificielle", ha="center",
         va="center", fontsize=12, color="#8a99a8")
 
 # Pied de page discret.

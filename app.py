@@ -86,7 +86,7 @@ def predict_one(row, bundle):
 
 
 st.title("IDS hybride : SVM + K-Means (NSL-KDD)")
-st.write("Décrivez une connexion (10 champs clés, le reste = médianes du "
+st.write("Décrivez une connexion (5 champs clés, le reste = médianes du "
          "train), puis cliquez sur Analyser. Dataset uniquement, pas de "
          "capture réseau en temps réel.")
 
@@ -97,35 +97,24 @@ if bundle is None:
 meta = bundle["meta"]
 dflt = meta["defaults"]
 
-c1, c2, c3 = st.columns(3)
+c1, c2 = st.columns(2)
 with c1:
-    duration = st.number_input("duration (s)", min_value=0.0,
-                               value=float(dflt.get("duration", 0)))
     protocol_type = st.selectbox("protocol_type", ["tcp", "udp", "icmp"],
                                  index=["tcp", "udp", "icmp"].index(
                                      str(dflt.get("protocol_type", "tcp"))))
     service = st.text_input("service", value=str(dflt.get("service", "http")))
     flag = st.selectbox("flag", ["SF", "S0", "REJ", "RSTR", "SH", "OTH"], index=0)
 with c2:
-    src_bytes = st.number_input("src_bytes", min_value=0.0,
-                                value=float(dflt.get("src_bytes", 0)))
-    dst_bytes = st.number_input("dst_bytes", min_value=0.0,
-                                value=float(dflt.get("dst_bytes", 0)))
     logged_in = st.selectbox("logged_in", [0, 1], index=int(dflt.get("logged_in", 0)))
     count = st.number_input("count", min_value=0.0, value=float(dflt.get("count", 0)))
-with c3:
-    srv_count = st.number_input("srv_count", min_value=0.0,
-                                value=float(dflt.get("srv_count", 0)))
-    dst_host_count = st.number_input("dst_host_count", min_value=0.0,
-                                     value=float(dflt.get("dst_host_count", 0)))
 
 if st.button("Analyser", type="primary"):
+    # Les 5 champs retires (duration, src_bytes, dst_bytes, srv_count,
+    # dst_host_count) restent dans le programme via les medianes du train
+    # (mesure : 0 attaque manquee en plus en les neutralisant).
     row = {c: dflt.get(c, 0.0) for c in COLUMNS_41}
-    row.update({"duration": duration, "protocol_type": protocol_type,
-                "service": service, "flag": flag, "src_bytes": src_bytes,
-                "dst_bytes": dst_bytes, "logged_in": logged_in,
-                "count": count, "srv_count": srv_count,
-                "dst_host_count": dst_host_count})
+    row.update({"protocol_type": protocol_type, "service": service,
+                "flag": flag, "logged_in": logged_in, "count": count})
     pred_svm, pred_h, cluster = predict_one(row, bundle)
     label = lambda p: "Intrusion suspectée" if p == 1 else "Trafic normal probable"
     st.subheader("Résultat")
